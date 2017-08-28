@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="content-language" content="zh-Hans" />
+		<title>pic</title>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<style>
+			
+		</style>
+		<script>
+			window.onload = function(){
+
+				var oDiv = document.getElementById('content');
+				var oVisit = document.getElementById('inner');
+				var oPrev = document.getElementById('prev');
+				var oNext = document.getElementById('next');
+				var oP1 = document.getElementById('p1');
+				var oP2 = document.getElementById('p2');
+				var oUl = oDiv.getElementsByTagName('ul')[0];
+				
+				var arrImg = ['img/1.jpg','img/2.jpg','img/3.jpg','img/4.jpg','img/5.jpg','img/6.jpg'];
+				var arrP1 = ['美女0','美女1','美女2','美女3','美女4','美女5'];
+				var aLi = null;
+				var aDiv = null;
+				var aImg = null;
+				var arrDiv = [];
+				var arrImg2 = [];
+				var arrLi = [];
+				var num = 0;
+				
+				//写入图片
+				oVisit.innerHTML = '<img />';
+				var oImg = oVisit.getElementsByTagName('img')[0];
+				
+				
+				for(var i=0; i<arrImg.length; i++){
+					oUl.innerHTML += '<li></li>';
+					aLi = oUl.getElementsByTagName('li');
+//					for(var j=0; j<aLi.length; j++){
+//						arrLi.push(aLi[i]);
+//					}
+				}
+				
+				for(i=0; i<arrImg.length; i++){
+					aLi[i].innerHTML += '<div></div>';				
+					aDiv = aLi[i].getElementsByTagName('div');
+					for(j=0; j<aDiv.length; j++){
+						arrDiv.push(aDiv[j]);
+					}
+				}
+				
+				for(i=0; i<arrDiv.length; i++){
+					arrDiv[i].innerHTML += '<img/>';
+					aImg = arrDiv[i].getElementsByTagName('img');
+					for(j=0; j<aImg.length; j++){
+						arrImg2.push(aImg[j]);
+					}
+				}
+				
+				
+				
+/*先点击next和prev按钮跳转后，num的计数与li的技术不一致。这是两个计数系统。所以只需要使li每次点击之后所得的index值赋给num就可以了。*/				
+				
+				//li点击事件
+				for(i=0; i<aLi.length; i++){
+					aLi[i].index = i;
+					aLi[i].onclick = function(){
+						oImg.src = arrImg[this.index];
+						oP1.innerHTML = this.index + 1 + '/' + arrImg.length;
+						oP2.innerHTML = arrP1[this.index];
+						for(i=0; i<aLi.length; i++){
+							aLi[i].className = '';
+						}
+						this.className = 'active';
+						//将li跳转后的index值赋予num；
+						num = this.index;
+					}
+				}
+				
+				//li鼠标滑动事件
+				for(i=0; i<aLi.length; i++){
+					aLi[i].index = i;
+					aLi[i].onmouseover = function(){
+						arrDiv[this.index].style.display = 'block';
+						arrImg2[this.index].src = arrImg[this.index];
+					}
+					aLi[i].onmouseout = function(){
+						arrDiv[this.index].style.display = 'none';
+					}
+				}
+				
+				//按钮切换控制
+				function Tab(){
+					oImg.src = arrImg[num];
+					oP1.innerHTML = num + 1 + '/' + arrImg.length;
+					oP2.innerHTML = arrP1[num];
+					for(i=0; i<aLi.length; i++){
+						aLi[i].className = '';
+					}
+					aLi[num].className = 'active';
+				}
+				Tab();
+				
+				
+				oNext.onclick = function(){
+					
+					num++;
+					if(num>arrImg.length-1){
+						num = 0;
+					}
+					Tab();
+				}
+				
+				oPrev.onclick = function(){
+					num--;
+					if(num < 0){  
+						num = arrImg.length-1;
+					}
+					Tab();
+				}
+			
+				
+			}
+		</script>
+	</head>
+	<body>
+		<div id="content">
+			<!--显示框-->
+			<div id="inner">
+			</div>
+			<!--小圆点-->
+			<ul>
+				
+			</ul>
+			<a href="#" id="prev">&lt;</a>
+			<a href="#" id="next">&gt;</a>
+			<p id="p1">1/4</p>
+			<p id="p2">美女1</p>
+		</div>
+	</body>
+</html>
